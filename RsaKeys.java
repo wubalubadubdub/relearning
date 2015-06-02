@@ -17,9 +17,10 @@ public class RsaKeys {
 
 		int p;
 		int q;
+		int e;
 		boolean firstTry = true;
 		// get first prime and validate input
-		do {
+		do { // change test conditions later so that spaces entered are ignored
 
 			if (firstTry) {
 				System.out.println("Enter one of the following numbers: ");
@@ -42,23 +43,24 @@ public class RsaKeys {
 		} while (!primes.contains(p)); // keeping looping and asking user for
 										// valid input
 		// while input is not a number from the list
-		
-		ArrayList <Integer> primesMinusP = primes;
-		int iP = primes.indexOf(p); //get the index of p 
-		primesMinusP.remove(iP); //remove p from the arraylist
+
+		ArrayList<Integer> primesMinusP = primes;
+		int iP = primes.indexOf(p); // get the index of p
+		primesMinusP.remove(iP); // remove p from the arraylist
 
 		// get second prime
 		firstTry = true;
 		do {
-			
+
 			if (firstTry) {
-				System.out.println("Good. Now pick a different one from the list.");
+				System.out
+						.println("Good. Now pick a different one from the list.");
 				firstTry = false;
 			} else
 				System.out.println("That's not on the list. Try again.");
-			
-			//create an copy of the list of primes and remove the first choice from it
-	
+
+			// create an copy of the list of primes and remove the first choice
+			// from it
 
 			for (Integer i : primesMinusP)
 				System.out.print(i + " ");
@@ -73,14 +75,52 @@ public class RsaKeys {
 			q = in.nextInt();
 
 		} while (!primesMinusP.contains(q));
-		
-		//determine the max number we can use and the number of primes less than max (phi)
-		int max = p*q;
-		int phi = (p-1)*(q-1);
-		
-		
 
+		// determine the max number we can use and the number of primes less
+		// than max (phi)
+		int max = p * q;
+		int phi = (p - 1) * (q - 1);
+
+		// remove the second choice and any primes greater than/equal to phi
+		// from the list
+		ArrayList<Integer> primesMinusPQ = primesMinusP;
+		int iQ = primesMinusPQ.indexOf(q);
+		primesMinusPQ.remove(iQ);
 		
+		ArrayList<Integer> finalPrimes = new ArrayList<Integer>();
+
+		for (int i : primesMinusPQ) {
+			 if (i < phi) {
+				finalPrimes.add(i);
+			} 
+			
+		}
+
+		firstTry = true;
+		do {
+			if (firstTry) {
+				System.out
+						.println("Finally, choose another number from the list: ");
+
+				firstTry = false;
+
+			} else
+				System.out.println("That's not on the list. Try again.");
+
+			for (Integer i : finalPrimes)
+				System.out.print(i + " ");
+			System.out.println();
+
+			while (!in.hasNextInt()) {
+				System.out.println("That's not on the list. Try again.");
+				in.next();
+			}
+
+			e = in.nextInt();
+
+		} while (!finalPrimes.contains(e));
+
+		System.out.println("Your public key exponent is: " + e);
 
 	}
 
